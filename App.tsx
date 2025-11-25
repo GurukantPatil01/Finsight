@@ -29,12 +29,12 @@ function App() {
       reader.onload = async () => {
         try {
           const base64Data = reader.result as string;
-          
+
           setStatus({ isProcessing: true, message: 'Extracting data points...' });
           // Parallelize extraction if we had multiple files, but for now linear is fine for single file
           // The optimization happens inside geminiService with thinkingBudget: 0
           const extractedData = await extractDataFromDocument(base64Data, file.type);
-          
+
           const updatedTransactions = [...transactions, ...extractedData];
           setTransactions(updatedTransactions);
 
@@ -59,32 +59,25 @@ function App() {
   };
 
   return (
-    <div className={`relative min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-dark-bg' : 'bg-gray-50'}`}>
-      
-      {/* Ambient Background Animation */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-400/20 dark:bg-primary-900/20 rounded-full blur-3xl opacity-50 animate-blob mix-blend-multiply dark:mix-blend-lighten filter"></div>
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-400/20 dark:bg-purple-900/20 rounded-full blur-3xl opacity-50 animate-blob animation-delay-2000 mix-blend-multiply dark:mix-blend-lighten filter"></div>
-        <div className="absolute -bottom-8 left-1/3 w-96 h-96 bg-pink-400/20 dark:bg-pink-900/20 rounded-full blur-3xl opacity-50 animate-blob animation-delay-4000 mix-blend-multiply dark:mix-blend-lighten filter"></div>
-      </div>
+    <div className={`relative min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark bg-dark-bg' : 'bg-neutral-50'}`}>
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full z-50 bg-white/70 dark:bg-dark-card/70 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+      <nav className="fixed top-0 w-full z-50 bg-white dark:bg-dark-card border-b border-neutral-200 dark:border-neutral-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2 group cursor-pointer">
-              <div className="bg-gradient-to-tr from-primary-600 to-primary-400 p-2 rounded-lg shadow-lg group-hover:shadow-primary-500/30 transition-shadow">
+              <div className="bg-primary-500 p-2 rounded-sm transition-colors">
                 <Icons.Wallet className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-xl tracking-tight text-slate-900 dark:text-white">
                 FinSight<span className="text-primary-500">.ai</span>
               </span>
             </div>
-            
+
             <div className="flex items-center gap-4">
-              <button 
+              <button
                 onClick={() => setIsDarkMode(!isDarkMode)}
-                className="p-2 rounded-full hover:bg-slate-200/50 dark:hover:bg-slate-800/50 text-slate-600 dark:text-slate-400 transition-all hover:scale-105 active:scale-95"
+                className="p-2 rounded-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 text-slate-600 dark:text-slate-400 transition-colors"
                 aria-label="Toggle Theme"
               >
                 {isDarkMode ? <Icons.Sun className="w-5 h-5" /> : <Icons.Moon className="w-5 h-5" />}
@@ -96,21 +89,21 @@ function App() {
 
       {/* Main Content */}
       <main className="relative pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        
+
         {/* Header Section */}
-        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 animate-fadeIn">
+        <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8 animate-fadeIn">
           <div>
-            <h1 className="text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-3">
-              Financial <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-purple-600">Overview</span>
+            <h1 className="text-3xl font-medium text-slate-900 dark:text-white tracking-tight mb-3">
+              Financial <span className="text-primary-600 dark:text-primary-400">Overview</span>
             </h1>
-            <p className="text-lg text-slate-500 dark:text-slate-400 max-w-xl">
+            <p className="text-base text-slate-500 dark:text-slate-400 max-w-xl">
               Turn your messy receipts and bank statements into clear, actionable financial insights in seconds.
             </p>
           </div>
           {transactions.length > 0 && (
-            <button 
+            <button
               onClick={clearData}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-900/10 hover:bg-rose-100 dark:hover:bg-rose-900/20 transition-colors border border-rose-200 dark:border-rose-900/30 shadow-sm"
+              className="px-5 py-2.5 rounded-sm text-sm font-normal text-slate-700 dark:text-slate-300 border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
               Clear Dashboard
             </button>
@@ -118,17 +111,17 @@ function App() {
         </div>
 
         {/* Upload Section */}
-        <div className="mb-12 animate-fadeIn" style={{ animationDelay: '100ms' }}>
-          <div className="bg-white dark:bg-dark-card rounded-2xl p-1 shadow-sm border border-slate-100 dark:border-slate-800">
-             <FileUpload 
-              onFileSelect={handleFileSelect} 
-              isProcessing={status.isProcessing} 
+        <div className="mb-16 animate-fadeIn" style={{ animationDelay: '100ms' }}>
+          <div className="bg-white dark:bg-dark-card rounded-sm p-1 border border-neutral-200 dark:border-neutral-800">
+            <FileUpload
+              onFileSelect={handleFileSelect}
+              isProcessing={status.isProcessing}
             />
           </div>
-         
+
           <div className="mt-4 flex flex-col items-center justify-center min-h-[2rem]">
             {status.error && (
-              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-sm bg-rose-50 dark:bg-rose-900/10 px-4 py-2 rounded-full border border-rose-200 dark:border-rose-900/50 animate-fadeIn">
+              <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-sm bg-white dark:bg-dark-card px-4 py-2 rounded-sm border border-rose-300 dark:border-rose-800 animate-fadeIn">
                 <Icons.Alert className="w-4 h-4" />
                 {status.error}
               </div>

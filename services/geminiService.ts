@@ -97,7 +97,7 @@ export const generateFinancialAdvice = async (
   const income = transactions
     .filter(t => t.type === TransactionType.INCOME)
     .reduce((sum, t) => sum + t.amount, 0);
-    
+
   const expense = transactions
     .filter(t => t.type === TransactionType.EXPENSE)
     .reduce((sum, t) => sum + t.amount, 0);
@@ -108,17 +108,17 @@ export const generateFinancialAdvice = async (
     .forEach(t => {
       categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
     });
-    
+
   const topCategories = Object.entries(categoryTotals)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5)
-    .map(([cat, amount]) => `${cat} ($${amount.toFixed(2)})`)
+    .map(([cat, amount]) => `${cat} (₹${amount.toFixed(2)})`)
     .join(", ");
 
   const summaryData = `
-    Total Income: $${income.toFixed(2)}
-    Total Expense: $${expense.toFixed(2)}
-    Net Balance: $${(income - expense).toFixed(2)}
+    Total Income: ₹${income.toFixed(2)}
+    Total Expense: ₹${expense.toFixed(2)}
+    Net Balance: ₹${(income - expense).toFixed(2)}
     Top Spending Categories: ${topCategories}
   `;
 
@@ -154,6 +154,6 @@ export const generateFinancialAdvice = async (
   if (response.text) {
     return JSON.parse(response.text) as FinancialAdvice;
   }
-  
+
   throw new Error("Failed to generate advice.");
 };

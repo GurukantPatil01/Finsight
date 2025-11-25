@@ -38,13 +38,13 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, isProcessing }) =
   };
 
   return (
-    <div 
-      className={`relative w-full h-48 sm:h-64 rounded-xl border-2 border-dashed transition-all duration-300 ease-in-out flex flex-col items-center justify-center text-center p-6 overflow-hidden group
-        ${dragActive 
-          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 scale-[1.02]' 
-          : 'border-slate-300 dark:border-slate-700 hover:border-primary-400 dark:hover:border-slate-500 bg-white/50 dark:bg-dark-card/50'
+    <div
+      className={`relative w-full h-48 sm:h-64 rounded-sm border-2 border-dashed transition-all duration-300 ease-in-out flex flex-col items-center justify-center text-center p-8 overflow-hidden
+        ${dragActive
+          ? 'border-primary-500 bg-primary-50/30 dark:bg-primary-900/10'
+          : 'border-neutral-300 dark:border-neutral-700 hover:border-primary-400 dark:hover:border-neutral-600 bg-white dark:bg-dark-card'
         }
-        ${isProcessing ? 'cursor-not-allowed border-primary-500/50' : 'cursor-pointer hover:shadow-lg'}
+        ${isProcessing ? 'cursor-not-allowed border-primary-400' : 'cursor-pointer'}
       `}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
@@ -59,35 +59,32 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, isProcessing }) =
         disabled={isProcessing}
       />
 
-      {/* Scanning Animation Layer */}
+      {/* Simple Processing Indicator */}
       {isProcessing && (
-        <div className="absolute inset-0 z-10 pointer-events-none">
-           <div className="absolute w-full h-1 bg-primary-500/50 shadow-[0_0_15px_rgba(14,165,233,0.8)] animate-scan"></div>
-           <div className="scan-overlay animate-scan"></div>
-        </div>
+        <div className="absolute top-0 left-0 w-full h-1 bg-primary-500/50 z-10"></div>
       )}
-      
-      <div className="flex flex-col items-center gap-4 pointer-events-none z-10 relative">
-        <div className={`p-4 rounded-full transition-all duration-500 
-          ${isProcessing 
-            ? 'bg-primary-100 dark:bg-primary-900 scale-110' 
-            : dragActive 
-              ? 'bg-primary-100 dark:bg-primary-900 scale-110' 
-              : 'bg-slate-100 dark:bg-slate-800 group-hover:scale-110'
+
+      <div className="flex flex-col items-center gap-5 pointer-events-none z-10 relative">
+        <div className={`p-5 rounded-sm border-2 transition-all duration-300 
+          ${isProcessing
+            ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+            : dragActive
+              ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20'
+              : 'border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900'
           }`}>
           {isProcessing ? (
-            <Icons.Loader className="w-8 h-8 text-primary-600 animate-spin" />
+            <Icons.Loader className="w-7 h-7 text-primary-600 animate-spin" />
           ) : (
-            <Icons.Upload className={`w-8 h-8 transition-colors ${dragActive ? 'text-primary-600' : 'text-slate-400 group-hover:text-primary-500'}`} />
+            <Icons.Upload className={`w-7 h-7 transition-colors ${dragActive ? 'text-primary-600' : 'text-slate-400'}`} />
           )}
         </div>
-        
-        <div className="space-y-1">
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
-            {isProcessing ? 'Scanning & Extracting Data...' : 'Click to upload or drag and drop'}
+
+        <div className="space-y-2">
+          <p className="text-sm font-normal text-slate-700 dark:text-slate-200">
+            {isProcessing ? 'Processing Document...' : 'Click to upload or drag and drop'}
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            AI-powered processing for Receipts, Invoices & Statements (PDF/JPG)
+            Receipts, Invoices & Statements (PDF/JPG)
           </p>
         </div>
       </div>
